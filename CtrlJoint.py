@@ -58,6 +58,17 @@ while True:
         #print("Left Wheel:", val.rate)
         #print("Right Wheel:", val2.rate)
         print(s)
+            
+      if(z == 'a'):
+        effort = effort
+        pub(joint_left, effort, start_time, end_time)
+        print(s)
+      
+      if(z == 'd')
+        effort = effort
+        pub(joint_right, effort, start_time, end_time)
+        print(s)
+      
 
       if x < -45 or x > 45:
         b0 = "./drop_box.sh"

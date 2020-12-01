@@ -38,6 +38,7 @@ while True:
       a.model_name = "robot"
       s = robot_proxy(a)
       x = s.pose.position.x
+      y = s.pose.position.y
       
       if(z == 'w'):
         effort = effort
@@ -70,7 +71,7 @@ while True:
         print(s)
       
 
-      if x < -45 or x > 45:
+      if x < -45 or x > 45 or y < -45 or y > 45:
         b0 = "./drop_box.sh"
         b1 = str(i) + ""
         i += 1

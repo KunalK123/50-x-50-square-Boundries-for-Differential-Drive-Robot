@@ -17,7 +17,7 @@ pub_feedback = rospy.ServiceProxy(msg_topic_feedback, GetJointProperties)
 rospy.init_node('dd_ctrl')
 pub = rospy.ServiceProxy(msg_topic,ApplyJointEffort)
 
-effort = 0.4
+effort = 0.5
 start_time = rospy.Time(0,0)
 
 f = 0.25
@@ -29,56 +29,44 @@ rate = rospy.Rate(f)
 
 robot_proxy = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
 
-#def getRobotLocation():
-#    global robot_proxy
-#    a = GetModelStateRequest(model_name = 'robot')
-#    a.model_name = "robot"
-#    s = robot_proxy(a)
-#    print s
-#    x = s.pose.position.x
-#    y = s.pose.position.y
-
-#    return(x,y)
-    
-
-
-#def dropBox(x,y):
-#    b0 = "./drop_box.sh"
-#    b1 = name + str(box_1)
-#    box_i += 1
-#    b2 = str(x) + ""
-#    b3 = str(y) + ""
-#    b4 = "&"
-#    buff = b0 + b1 + b2 + b3
-#    os.system(buff)
-
-
 while True:
       x = 0
       i = 1
-      effort = -effort
-      pub(joint_left, effort, start_time, end_time)
-      pub(joint_right, effort, start_time, end_time)
-      val = pub_feedback(joint_left)
-      val2 = pub_feedback(joint_right)
-      print("Left Wheel:", val.rate)
-      print("Right Wheel:", val2.rate)
-      rate.sleep()
+      z = raw_input("Input:")
       global robot_proxy
       a = GetModelStateRequest(model_name = 'robot')
       a.model_name = "robot"
       s = robot_proxy(a)
-      print s
       x = s.pose.position.x
-      if x < -1:
+      
+      if(z == 'w'):
+        effort = effort
+        pub(joint_left, effort, start_time, end_time)
+        pub(joint_right, effort, start_time, end_time)
+        #val = pub_feedback(joint_left)
+        #val2 = pub_feedback(joint_right)
+        #print("Left Wheel:", val.rate)
+        #print("Right Wheel:", val2.rate)
+        print(s)
+
+      if(z == 's'):
+        effort = -effort
+        pub(joint_left, effort, start_time, end_time)
+        pub(joint_right, effort, start_time, end_time)
+        #val = pub_feedback(joint_left)
+        #val2 = pub_feedback(joint_right)
+        #print("Left Wheel:", val.rate)
+        #print("Right Wheel:", val2.rate)
+        print(s)
+
+      if x < -45 or x > 45:
         b0 = "./drop_box.sh"
         b1 = str(i) + ""
         i += 1
-        #b2 = str(x) + ""
-        #b3 = "&"
-        buff = b0 + " " + b1
+        b2 = str(x) + ""
+        b3 = str(y) + ""
+        b4 = "&"
+        buff = b0 + " " + b1 + b2 + b3 + b4
         os.system(buff)
-      else:
-          continue 
-
+ 
       
